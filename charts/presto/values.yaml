@@ -1,18 +1,26 @@
 # Default values for presto
 
 image:
-  repository: prestodb/presto
+  #repository: prestodb/presto
+  repository: ahanaio/prestodb-sandbox
   pullPolicy: IfNotPresent
   tag: ~
 
 imagePullSecrets: []
 
 service:
-  type: ClusterIP
+  # type: ClusterIP
+  # port: 8080
+  # nodePort: ~
+  # labels: {}
+  # annotations: {}
+
+  type: NodePort
   port: 8080
-  nodePort: ~
+  nodePort: 30400
   labels: {}
   annotations: {}
+  
 
 ingress:
   enabled: false
@@ -242,7 +250,16 @@ worker:
   securityContext: {}
 
 # Catalogs
-catalog: {}
+#catalog: {}
+catalog:
+  hive: |-
+    connector.name: hive-hadoop2
+    hive.metastore.uri: thrift://hive-metastore:9083
+    hive.config.resources: /etc/hadoop/conf/core-site.xml,/etc/hadoop/conf/hdfs-site.xml
+    hive.s3.endpoint: http://minio:9000
+    hive.s3.aws-access-key: presto
+    hive.s3.aws-secret-key: presto00
+    hive.s3.path-style-access=true
 #  jmx: |-
 #    connector.name=jmx
 #  tpch: |-
