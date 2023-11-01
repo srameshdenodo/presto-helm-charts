@@ -70,7 +70,8 @@ home: /opt/presto-server
 # single - Minimal Presto deployment where single pod acts as Coordinator and Worker
 # cluster - Standard Presto deployment with one Coordinator and multiple Workers
 # ha-cluster - Highly available Presto deployment with multiple Resource Managers, Coordinators and Workers
-mode: cluster
+# mode: cluster
+mode: single
 
 # Common node properties, see https://prestodb.io/docs/current/installation/deployment.html#node-properties
 node:
@@ -187,7 +188,10 @@ coordinator:
       type: Recreate
     revisionHistoryLimit: 3
   # Coordinator resource limits and requests
-  resources: {}
+  resources: 
+    limits:
+      cpu: 4
+      memory: 6Gi
   # Constrain coordinator pods to nodes with specific node labels
   nodeSelector: {}
   # Constrain coordinator pods to nodes by affinity/anti-affinity rules
